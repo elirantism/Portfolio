@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliran Tismansky - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e4e4e7;
+            background: #09090b;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(9, 9, 11, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #27272a;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #a1a1aa;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 150px 0 100px;
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid #3b82f6;
+            object-fit: cover;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 1.4em;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .graduation {
+            font-size: 1.1em;
+            color: #71717a;
+        }
+
+        /* About Section */
+        .about {
+            padding: 80px 0;
+            background: #09090b;
+        }
+
+        .about h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #3b82f6;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-content p {
+            font-size: 1.15em;
+            color: #a1a1aa;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        /* Projects Section */
+        .projects-section {
+            padding: 80px 0;
+            background: #0f0f10;
+        }
+
+        .projects-section h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #3b82f6;
+        }
+
+        .project-preview {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #27272a;
+        }
+
+        .project-preview:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .project-preview h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #3b82f6;
+        }
+
+        .project-preview p {
+            color: #a1a1aa;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        /* Project Detail Page */
+        .project-detail {
+            display: none;
+            padding: 100px 0 80px;
+            background: #09090b;
+            min-height: 100vh;
+        }
+
+        .project-detail.active {
+            display: block;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #60a5fa;
+            transform: translateX(-5px);
+        }
+
+        .project-detail h2 {
+            font-size: 2.8em;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+
+        .project-detail .detail-content {
+            max-width: 900px;
+        }
+
+        .project-detail .description {
+            font-size: 1.15em;
+            color: #a1a1aa;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .project-images {
+            margin: 40px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-image {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #27272a;
+        }
+
+        .project-image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #27272a 0%, #18181b 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #52525b;
+            font-size: 0.9em;
+        }
+
+        .project-details-list {
+            margin-top: 40px;
+        }
+
+        .project-details-list h3 {
+            font-size: 1.6em;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+
+        .project-details-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .project-details-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            color: #a1a1aa;
+            line-height: 1.7;
+        }
+
+        .project-details-list li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .tech-stack {
+            margin-top: 40px;
+        }
+
+        .tech-stack h3 {
+            font-size: 1.6em;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tech-tag {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #3b82f6;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 500;
+            border: 1px solid #27272a;
+        }
+
+        /* Experience */
+        .experience {
+            padding: 80px 0;
+            background: #09090b;
+        }
+
+        .experience h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #3b82f6;
+        }
+
+        .experience-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 12px;
+            padding: 40px;
+            border-left: 4px solid #8b5cf6;
+            border: 1px solid #27272a;
+        }
+
+        .experience-card h3 {
+            font-size: 1.8em;
+            color: #8b5cf6;
+            margin-bottom: 8px;
+        }
+
+        .experience-card .role {
+            font-size: 1.3em;
+            color: #e4e4e7;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .experience-card .date {
+            color: #71717a;
+            font-size: 1em;
+            margin-bottom: 25px;
+        }
+
+        .experience-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .experience-card li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            color: #a1a1aa;
+            line-height: 1.7;
+        }
+
+        .experience-card li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #8b5cf6;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        /* Contact */
+        .contact {
+            padding: 80px 0;
+            background: #0f0f10;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #3b82f6;
+        }
+
+        .contact p {
+            font-size: 1.2em;
+            color: #a1a1aa;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-links a {
+            color: #3b82f6;
+            text-decoration: none;
+            padding: 15px 35px;
+            border: 2px solid #3b82f6;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1.05em;
+        }
+
+        .contact-links a:hover {
+            background: #3b82f6;
+            color: #09090b;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: #09090b;
+            color: #52525b;
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #27272a;
+        }
+
+        /* Hide main sections when viewing project detail */
+        body.viewing-project .main-content {
+            display: none;
+        }
+
+        .contact a:hover {
+            background: #27272a !important;
+            border-color: #3b82f6 !important;
+            transform: translateY(-2px);
+        }
+
+        /* Slightly smaller + stacked images just for the Sensor project */
+        #project-sensor .detail-content {
+        max-width: 1000px;                /* moderate width */
+        margin: 0 auto;                   /* keep centered */
+        }
+
+        #project-sensor .project-images {
+        display: grid;
+        grid-template-columns: 1fr;       /* one per line */
+        gap: 24px;
+        }
+
+        #project-sensor .project-image {
+        padding: 0;
+        border: 1px solid #27272a;
+        border-radius: 10px;
+        background: #0f0f10;
+        overflow: hidden;
+        }
+
+        #project-sensor .project-image img {
+        display: block;
+        width: 90%;                       /* slightly smaller inside the container */
+        height: auto;
+        margin: 0 auto;                   /* center horizontally */
+        border-radius: 10px;
+        max-width: 900px;                 /* cap absolute width */
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-links a {
+                font-size: 0.85em;
+            }
+
+            .profile-image {
+                width: 140px;
+                height: 140px;
+            }
+
+            header h1 {
+                font-size: 2.2em;
+            }
+
+            header p {
+                font-size: 1.1em;
+            }
+
+            .graduation {
+                font-size: 1em;
+            }
+
+            .project-preview {
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="nav-logo" onclick="showMain(event)">Eliran Tismansky</a>
+            <ul class="nav-links">
+                <li><a href="#about" onclick="showMain(event)">About</a></li>
+                <li><a href="#projects" onclick="showMain(event)">Projects</a></li>
+                <li><a href="#resume">Resume</a></li>
+                <li><a href="https://github.com/yourprofile" target="_blank">GitHub</a></li>
+                <li><a href="#contact" onclick="showMain(event)">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <img src="/images/IMG_4654 2.jpg" alt="Eliran Tismansky" class="profile-image">
+                    <div>
+                        <h1>Eliran Tismansky</h1>
+                        <p>EECS Student at UC Berkeley</p>
+                        <p class="graduation">Expected Graduation: May 2027</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="about" id="about">
+            <div class="container">
+                <h2>About Me</h2>
+                <div class="about-content">
+                    <p>I'm a junior at UC Berkeley studying Electrical Engineering and Computer Science (EECS), with a passion for building hardware and software systems from the ground up. My work spans building hardware, software, PCB design, and more!</p>
+                    
+                    <p>Currently, I'm an member of Berkeley STAR, our competitive rocket club, where I design custom electronics for aerospace applications. I previously interned at Stealth startup as a Software Engineering Intern, where I helped develop the backend of an investing mobile app.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="projects-section" id="projects">
+            <div class="container">
+                <h2>Featured Projects</h2>
+                
+                <div class="project-preview" onclick="showProject('drone')">
+                    <h3>DIY Drone</h3>
+                    <p>Custom quadcopter with PCB-based frame, featuring a Teensy 4.0 flight controller with PID stabilization and Kalman filtering for precise flight control.</p>
+                </div>
+
+                <div class="project-preview" onclick="showProject('sensor')">
+                    <h3>Capacitive Fill Sensor PCB</h3>
+                    <p>Custom PCB for cryogenic tank fill-level sensing at Berkeley STAR, using capacitance measurements and RS485 communication for reliable data transmission.</p>
+                </div>
+
+                <div class="project-preview" onclick="showProject('youtube')">
+                    <h3>AI YouTube Learning Extension</h3>
+                    <p>Chrome extension integrating with YouTube for real-time Q&A functionality using OpenAI's GPT models, FastAPI backend, and MongoDB storage.</p>
+                </div>
+
+                <div class="project-preview" onclick="showProject('tetris')">
+                    <h3>Tetris Game</h3>
+                    <p>Classic Tetris game with smooth gameplay, scoring system, level progression, and intuitive controls built from scratch using JavaScript and HTML5 Canvas.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="experience">
+            <div class="container">
+                <h2>Experience</h2>
+                <div class="experience-card">
+                    <h3>Stealth Startup</h3>
+                    <div class="role">Software Engineering Intern</div>
+                    <div class="date">March 2025 - July 2025</div>
+                    <ul>
+                        <li>Contributed to backend development of a mobile app by building and maintaining automated test pipelines using Pytest, enabling testing for LLM-based data extraction workflows</li>
+                        <li>Designed pipelines where downstream tasks were dependent on outputs from upstream LLM or AI vision tasks</li>
+                        <li>Leveraged PostgreSQL to store and manage structured data generated by LLMs across 20,000+ processed documents</li>
+                        <li>Utilized Git and GitHub for version control, managing feature branches, creating and reviewing pull requests, and collaborating with a distributed team to maintain clean, production-ready code</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="container">
+                <h2>Contact Me</h2>
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="margin-bottom: 40px;">
+                        <p style="font-size: 1.3em; font-weight: 600; color: #e4e4e7; margin-bottom: 5px;">Eliran Tismansky</p>
+                        <p style="font-size: 1.1em; color: #a1a1aa; margin-bottom: 20px;">UC Berkeley 2027 — Electrical Engineering and Computer Science</p>
+                        <p style="font-size: 1.05em; color: #a1a1aa; margin-bottom: 8px;">Email: <a href="mailto:your.email@berkeley.edu" style="color: #3b82f6; text-decoration: none;">eliran_tismansky@berkeley.edu</a></p>
+                        <p style="font-size: 1.05em; color: #a1a1aa;">Phone: <a href="tel:+1234567890" style="color: #3b82f6; text-decoration: none;">+818-404-0019</a></p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                        <a href="https://github.com/elirantism" target="_blank" style="display: flex; align-items: center; gap: 12px; padding: 18px 25px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; color: #e4e4e7; text-decoration: none; font-size: 1.1em; font-weight: 500; transition: all 0.3s ease;">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                        <a href="https://www.linkedin.com/in/eliran-tismansky/" target="_blank" style="display: flex; align-items: center; gap: 12px; padding: 18px 25px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; color: #e4e4e7; text-decoration: none; font-size: 1.1em; font-weight: 500; transition: all 0.3s ease;">
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            LinkedIn
+                        </a>
+                        <a href="mailto:eliran_tismansky@berkeley.edu" style="display: flex; align-items: center; gap: 12px; padding: 18px 25px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; color: #e4e4e7; text-decoration: none; font-size: 1.1em; font-weight: 500; transition: all 0.3s ease;">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            Email
+                        </a>
+                        <a href="tel:+818-404-0019" style="display: flex; align-items: center; gap: 12px; padding: 18px 25px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; color: #e4e4e7; text-decoration: none; font-size: 1.1em; font-weight: 500; transition: all 0.3s ease;">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            Phone
+                        </a>
+                    </div>
+                    
+                    
+                    <!-- <div style="margin-top: 20px;">
+                        <a href="your-resume.pdf" download style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px 25px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; color: #e4e4e7; text-decoration: none; font-size: 1.1em; font-weight: 500; transition: all 0.3s ease; max-width: 400px; margin: 0 auto;">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Resume
+                        </a>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2025 Eliran Tismansky. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Project Detail: Drone -->
+    <div class="project-detail" id="project-drone">
+        <div class="container">
+            <a href="#" class="back-button" onclick="showMain(event)">← Back to Projects</a>
+            <div class="detail-content">
+                <h2>DIY Drone</h2>
+                <p class="description">A custom quadcopter built from scratch, featuring integrated hardware design and advanced flight control software.</p>
+
+                <div class="project-images">
+                    <div class="project-image">
+                        <img src="/images/IMG_2686.jpg" alt="Assembled Drone" style="width: 100%; border-radius: 8px;">
+                    </div>
+                    <div class="project-image">
+                        <img src="/images/IMG_2690.jpg" alt="Custom PCB Frame" style="width: 100%; border-radius: 8px;">
+                    </div>
+                    <div class="project-image">
+                        <video controls style="width: 100%; border-radius: 8px;">
+                            <source src="/images/IMG_2734.MOV" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+
+                <div class="project-details-list">
+                    <h3>Technical Implementation</h3>
+                    <ul>
+                        <li>Designed and assembled a custom quadcopter by integrating brushless motors, electronic speed controllers, an MPU-6050 IMU, and a 4S LiPo battery into a custom PCB-based frame, soldering and mounting all components</li>
+                        <li>Programmed a flight controller on a Teensy 4.0 with a PID loop to stabilize roll, pitch, and yaw</li>
+                        <li>Implemented I²C communication between Teensy and MPU-6050 IMU, and applied Kalman filtering to fuse gyroscope and accelerometer data, reducing drift and noise</li>
+                        <li>Engineered a 250 Hz real-time control loop, synchronizing IMU sampling, PPM signal parsing, and PWM motor output to maintain flight stability under real-world conditions</li>
+                    </ul>
+                </div>
+
+                <div class="project-details-list">
+                    <h3>Flight Controller Code</h3>
+                    <p style="color: #a1a1aa; margin-bottom: 20px;">View the complete flight controller implementation on GitHub:</p>
+                    <a href="https://github.com/elirantism/Drone" target="_blank" style="display: inline-block; color: #3b82f6; text-decoration: none; padding: 12px 30px; border: 2px solid #3b82f6; border-radius: 8px; transition: all 0.3s ease; font-weight: 500;">
+                        View on GitHub →
+                    </a>
+                </div>
+
+                <div class="tech-stack">
+                    <h3>Tools & Technologies</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">C++</span>
+                        <span class="tech-tag">Teensy 4.0</span>
+                        <span class="tech-tag">MPU-6050 IMU</span>
+                        <span class="tech-tag">PID Control</span>
+                        <span class="tech-tag">I²C Communication</span>
+                        <span class="tech-tag">PCB Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail: Sensor -->
+    <div class="project-detail" id="project-sensor">
+        <div class="container">
+            <a href="#" class="back-button" onclick="showMain(event)">← Back to Projects</a>
+            <div class="detail-content">
+                <h2>Capacitive Fill Sensor PCB</h2>
+                <p class="description">Designed for Berkeley STAR's competitive rocket team, this custom PCB enables precise fill-level sensing in cryogenic propellant tanks using capacitive measurement techniques optimized for extreme environments.</p>
+
+                <div class="project-images">
+                    <div class="project-image">
+                        <img src="/images/Screenshot 2025-10-23 at 1.48.11 PM.png" alt="PCB Layout" style="width: 100%; border-radius: 8px;">
+                    </div>
+                    <div class="project-image">
+                        <img src="/images/Screenshot 2025-10-23 at 1.54.00 PM.png" alt="Schematic" style="width: 100%; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div class="project-details-list">
+                    <h3>Technical Implementation</h3>
+                    <ul>
+                        <li>Designed a custom PCB for cryogenic tank fill-level sensing, leveraging the dielectric constant difference between air and kerosene/LOX to measure capacitance between electrodes</li>
+                        <li>Integrated ESP32-S3 microcontroller, FDC1004 capacitive measurement IC, and RS485 communication circuit for reliable, noise-resistant data transmission to DAQ systems</li>
+                        <li>Implemented power regulation (LDO) and electrode connection with FDC1004 for precise picoFarad-scale capacitance measurements</li>
+                        <li>Produced complete schematic, PCB layout, and bill of materials in Altium, delivering a manufacturable board</li>
+                        <li>Currently working on testing/writing software</li>
+                    </ul>
+                </div>
+
+                <div class="tech-stack">
+                    <h3>Tools & Technologies</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Altium Designer</span>
+                        <span class="tech-tag">ESP32-S3</span>
+                        <span class="tech-tag">FDC1004</span>
+                        <span class="tech-tag">RS485</span>
+                        <span class="tech-tag">PCB Design</span>
+                        <span class="tech-tag">Power Regulation</span>
+                        <span class="tech-tag">Capacitive Sensing</span>
+                        <span class="tech-tag">C/C++</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Detail: YouTube -->
+    <div class="project-detail" id="project-youtube">
+        <div class="container">
+            <a href="#" class="back-button" onclick="showMain(event)">← Back to Projects</a>
+            <div class="detail-content">
+                <h2>AI YouTube Learning Extension</h2>
+                <p class="description">A Chrome extension that transforms YouTube into an interactive learning platform by enabling real-time Q&A on video content using GPT-powered AI, complete with a full-stack backend infrastructure.</p>
+                
+                <div class="project-images" style="grid-template-columns: 1fr; max-width: 100%;">
+                    <div class="project-image" style="padding: 0;">
+                        <img src="/images/Screenshot 2025-10-23 at 2.21.22 AM.png" alt="Extension UI" style="width: 100%; border-radius: 8px; max-width: none;">
+                    </div>
+                    <div class="project-image" style="padding: 0;">
+                        <img src="/imagesScreenshot 2025-10-23 at 2.26.11 AM.png" alt="Q&A Interface" style="width: 100%; border-radius: 8px; max-width: none;">
+                    </div>
+                </div>
+
+                <div class="project-details-list">
+                    <h3>Technical Implementation</h3>
+                    <ul>
+                        <li>Developed a Chrome extension that integrates with YouTube, enabling video-specific real-time question-and-answer functionality using OpenAI's GPT models</li>
+                        <li>Implemented efficient data storage using MongoDB for caching video transcripts and conversation history</li>
+                        <li>Created and deployed a custom API with FastAPI, enabling efficient frontend-backend communication using Uvicorn</li>
+                        <li>Built seamless integration between Chrome extension frontend (JavaScript) and FastAPI backend for real-time AI responses with minimal latency</li>
+                    </ul>
+                </div>
+
+                <div class="project-details-list">
+                    <h3>Source Code</h3>
+                    <p style="color: #a1a1aa; margin-bottom: 20px;">View the complete flight controller implementation on GitHub:</p>
+                    <a href="https://github.com/elirantism/youtube_extension" target="_blank" style="display: inline-block; color: #3b82f6; text-decoration: none; padding: 12px 30px; border: 2px solid #3b82f6; border-radius: 8px; transition: all 0.3s ease; font-weight: 500;">
+                        View on GitHub →
+                    </a>
+                </div>
+
+                <div class="tech-stack">
+                    <h3>Tools & Technologies</h3>
+                    <div class="tech-tags">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Chrome Extensions API</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">OpenAI GPT API</span>
+                        <span class="tech-tag">Uvicorn</span>
+                        <span class="tech-tag">REST API</span>
+                        <span class="tech-tag">HTML/CSS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!-- Project Detail: Tetris -->
+<div class="project-detail" id="project-tetris">
+    <div class="container">
+        <a href="#" class="back-button" onclick="showMain(event)">← Back to Projects</a>
+        <div class="detail-content">
+            <h2>Tetris Game</h2>
+            <p class="description">A fully functional Tetris game built from scratch with smooth gameplay mechanics, scoring system, and classic Tetris features including piece rotation, line clearing, and progressive difficulty scaling.</p>
+            
+            <div class="project-image" style="padding: 0;">
+                <p style="color: #a1a1aa; text-align: center; margin-bottom: 15px; font-size: 1.1em;">
+                    <strong style="color: #3b82f6;">Try it out!</strong> Use arrow keys to play. Click inside the game to start.
+                </p>
+                <iframe
+                    id="tetris-iframe"
+                    src="/Tetris/index.html"
+                    tabindex="0"
+                    style="width: 100%; height: 900px; border: 2px solid #3b82f6; border-radius: 8px; max-width: 600px; margin: 0 auto; display: block; background: #09090b;"
+                    scrolling="no">
+                </iframe>
+
+            </div>
+
+            <div class="project-details-list">
+                <h3>Technical Implementation</h3>
+                <ul>
+                    <li>Developed a full Tetris game, including piece generation, rotation algorithms, collision detection, and line clearing mechanics</li>
+                    <li>Implemented a responsive game loop with smooth animations and real-time user input handling</li>
+                    <li>Built scoring system with level progression that increases game speed as players advance</li>
+                </ul>
+            </div>
+
+            <div class="project-details-list">
+                <h3>Source Code</h3>
+                <p style="color: #a1a1aa; margin-bottom: 20px;">View the complete game implementation on GitHub:</p>
+                <a href="https://github.com/elirantism/tetris" target="_blank" style="display: inline-block; color: #3b82f6; text-decoration: none; padding: 12px 30px; border: 2px solid #3b82f6; border-radius: 8px; transition: all 0.3s ease; font-weight: 500;">
+                    View on GitHub →
+                </a>
+            </div>
+
+            <div class="tech-stack">
+                <h3>Tools & Technologies</h3>
+                <div class="tech-tags">
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">HTML5 Canvas</span>
+                    <span class="tech-tag">CSS3</span>
+                    <span class="tech-tag">Game Development</span>
+                    <span class="tech-tag">Animation</span>
+                    <span class="tech-tag">Event Handling</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  function showProject(projectId) {
+    document.body.classList.add('viewing-project');
+    document.getElementById('project-' + projectId).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function showMain(event) {
+    event.preventDefault();
+    document.body.classList.remove('viewing-project');
+    document.querySelectorAll('.project-detail').forEach(el => {
+      el.classList.remove('active');
+    });
+
+    // If clicking a nav link, scroll to that section
+    const href = event.target.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Make sure we re-enable page scroll when leaving a project
+    unlockScroll();
+  }
+
+  // Smooth scrolling for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      if (this.getAttribute('onclick')) return;
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ---- Tetris iframe: prevent page scrolling while playing ----
+  const tetrisIframe = document.getElementById('tetris-iframe');
+  const SCROLL_KEYS = new Set(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','PageUp','PageDown','Home','End']);
+
+  // Ensure iframe can be focused (no visual change)
+  if (tetrisIframe && tetrisIframe.tabIndex < 0) {
+    tetrisIframe.tabIndex = 0;
+  }
+
+  let scrollLocked = false;
+
+  function lockScroll() {
+    if (scrollLocked) return;
+    scrollLocked = true;
+    // Disable page scrolling regardless of where the key events fire
+    const html = document.documentElement;
+    const body = document.body;
+    html.dataset.prevOverflow = html.style.overflow || '';
+    body.dataset.prevOverflow = body.style.overflow || '';
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+  }
+
+  function unlockScroll() {
+    if (!scrollLocked) return;
+    scrollLocked = false;
+    const html = document.documentElement;
+    const body = document.body;
+    html.style.overflow = html.dataset.prevOverflow || '';
+    body.style.overflow = body.dataset.prevOverflow || '';
+  }
+
+  // Lock scroll when interacting with the iframe; unlock when leaving
+  if (tetrisIframe) {
+    tetrisIframe.addEventListener('pointerenter', lockScroll);
+    tetrisIframe.addEventListener('pointerleave', unlockScroll);
+    tetrisIframe.addEventListener('pointerdown', () => {
+      lockScroll();
+      tetrisIframe.focus();
+    });
+    tetrisIframe.addEventListener('blur', unlockScroll);
+  }
+
+  // Extra safety: if scroll is locked, eat scroll-related keys at the parent level
+  document.addEventListener('keydown', (e) => {
+    if (scrollLocked && SCROLL_KEYS.has(e.key)) {
+      e.preventDefault();
+    }
+  }, { capture: true });
+</script>
+
+</body>
+</html>
