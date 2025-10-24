@@ -1036,32 +1036,31 @@
     if (section) section.classList.add("active");
 
     // Lazy-load Tetris only when opening that project
-    if (projectId === "tetris") {
-      const iframe = document.getElementById("tetris-iframe");
-      if (iframe && !iframe.src) iframe.src = iframe.dataset.src || "./Tetris/index.html";
+    const tetrisIframe = document.getElementById("tetris-iframe");
+    if (tetrisIframe) tetrisIframe.src = "";
+
+        showFixedBar(true);
+        updateNavButtons(projectId);
+        window.scrollTo(0, 0);
     }
 
-    showFixedBar(true);
-    updateNavButtons(projectId);
-    window.scrollTo(0, 0);
-  }
+    function showMain(event) {
+        if (event) event.preventDefault();
+        document.body.classList.remove("viewing-project");
+        document.querySelectorAll(".project-detail").forEach(el => el.classList.remove("active"));
 
-  function showMain(event) {
-    if (event) event.preventDefault();
-    document.body.classList.remove("viewing-project");
-    document.querySelectorAll(".project-detail").forEach(el => el.classList.remove("active"));
+        // Stop Tetris (and make it lazy-load again next time)
+        const tetrisIframe = document.getElementById("tetris-iframe");
+        if (tetrisIframe) tetrisIframe.src = "";
 
-    // Stop Tetris
-    const tetrisIframe = document.getElementById("tetris-iframe");
-    if (tetrisIframe) tetrisIframe.src = "about:blank";
 
-    const projects = document.getElementById("projects");
-    if (projects) projects.scrollIntoView({ behavior: "smooth" });
-    else window.scrollTo({ top: 0, behavior: "smooth" });
+        const projects = document.getElementById("projects");
+        if (projects) projects.scrollIntoView({ behavior: "smooth" });
+        else window.scrollTo({ top: 0, behavior: "smooth" });
 
-    showFixedBar(false);
-    unlockScroll();
-  }
+        showFixedBar(false);
+        unlockScroll();
+    }
 
   function navigateProject(direction) {
     const active = document.querySelector(".project-detail.active");
