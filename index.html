@@ -1027,21 +1027,16 @@
     }
   }
 
-  function tetrisPath() {
-    const iframe = document.getElementById("tetris-iframe");
-    if (!iframe) return null;
-    let p = iframe.getAttribute("data-src") || "./Tetris/index.html";
-    // If someone puts "/Tetris/index.html", convert to "./Tetris/index.html"
-    if (p.startsWith("/")) p = "." + p;
-    return p;
-  }
-
   function showProject(projectId) {
-    // If leaving Tetris, stop it so it doesn't run hidden
-    const active = document.querySelector(".project-detail.active");
-    if (active && active.id === "project-tetris" && projectId !== "tetris") {
-      const ifr = document.getElementById("tetris-iframe");
-      if (ifr) { ifr.src = ""; }
+    const tetrisIframe = document.getElementById("tetris-iframe");
+    
+    // Stop Tetris when leaving it
+    const currentActive = document.querySelector(".project-detail.active");
+    if (currentActive && currentActive.id === "project-tetris" && projectId !== "tetris") {
+      if (tetrisIframe) {
+        // Pause the game by hiding iframe instead of clearing src
+        tetrisIframe.style.display = "none";
+      }
       unlockScroll();
     }
 
@@ -1050,19 +1045,12 @@
     const section = document.getElementById("project-" + projectId);
     if (section) section.classList.add("active");
 
-    // Lazy-load Tetris only when opening that project
-    if (projectId === "tetris") {
-      const iframe = document.getElementById("tetris-iframe");
-      if (iframe) {
-        const path = tetrisPath();
-        const needsLoad =
-          !iframe.src ||
-          iframe.src === "" ||
-          iframe.src.endsWith("about:blank") ||
-          iframe.src === "about:blank";
-        if (needsLoad && path) {
-          iframe.src = path;   // <-- actually load the game
-        }
+    // Show Tetris when entering it
+    if (projectId === "tetris" && tetrisIframe) {
+      tetrisIframe.style.display = "block";
+      // Force reload if src is empty
+      if (!tetrisIframe.src || tetrisIframe.src === "" || tetrisIframe.src.endsWith("about:blank")) {
+        tetrisIframe.src = "Tetris/index.html";
       }
     }
 
@@ -1073,12 +1061,15 @@
 
   function showMain(event) {
     if (event) event.preventDefault();
+    
+    // Hide Tetris iframe when going back to main (don't clear src)
+    const tetrisIframe = document.getElementById("tetris-iframe");
+    if (tetrisIframe) {
+      tetrisIframe.style.display = "none";
+    }
+    
     document.body.classList.remove("viewing-project");
     document.querySelectorAll(".project-detail").forEach(el => el.classList.remove("active"));
-
-    // Stop Tetris (so it reloads on next open)
-    const tetrisIframe = document.getElementById("tetris-iframe");
-    if (tetrisIframe) tetrisIframe.src = "";
 
     const projects = document.getElementById("projects");
     if (projects) projects.scrollIntoView({ behavior: "smooth" });
