@@ -470,6 +470,144 @@
         max-width: 900px;                 /* cap absolute width */
         }
 
+        .project-nav {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin: 10px 0 24px;
+        }
+        .project-nav .nav-btn {
+            appearance: none;
+            border: 1px solid #27272a;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #e4e4e7;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .project-nav .nav-btn:hover {
+            transform: translateY(-1px);
+            border-color: #3b82f6;
+            box-shadow: 0 6px 24px rgba(59,130,246,.15);
+        }
+        .project-nav .nav-btn.primary {
+            border-color: #3b82f6;
+        }
+
+        /* Hide the old inline back link so there's only one Back button */
+        .project-detail .back-button { display: none; }
+
+        /* Fixed bottom project nav (shown only in project view) */
+        .project-fixed-nav {
+        position: fixed;
+        left: 0; right: 0; bottom: 0;
+        height: 64px;
+        background: rgba(9,9,11,0.92);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid #27272a;
+        display: none;                  /* toggled by JS */
+        z-index: 1001;
+        }
+
+        .project-fixed-nav .inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;   /* left | center | right */
+        align-items: center;
+        padding: 0 20px;
+        gap: 12px;
+        }
+
+        .project-fixed-nav .slot-left  { justify-self: start; }
+        .project-fixed-nav .slot-center{ justify-self: center; }
+        .project-fixed-nav .slot-right { justify-self: end; }
+
+        .project-fixed-nav .nav-btn {
+        appearance: none;
+        border: 1px solid #27272a;
+        background: linear-gradient(135deg,#1e293b 0%,#0f172a 100%);
+        color: #e4e4e7;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+        }
+        .project-fixed-nav .nav-btn:hover {
+        transform: translateY(-1px);
+        border-color: #3b82f6;
+        box-shadow: 0 6px 24px rgba(59,130,246,.15);
+        }
+        .project-fixed-nav .nav-btn.primary { border-color: #3b82f6; }
+
+        /* Hide underline from Back to Projects button */
+        .project-fixed-nav .back-btn {
+        text-decoration: none;
+        }
+
+        /* Hide the old inline back link so there's only one Back button */
+        .project-detail .back-button {
+        display: none;
+        }
+
+        /* Fixed bottom project nav */
+        .project-fixed-nav {
+        position: fixed;
+        left: 0; right: 0; bottom: 0;
+        height: 64px;
+        background: rgba(9,9,11,0.92);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid #27272a;
+        display: none; /* toggled by JS */
+        z-index: 1001;
+        }
+
+        .project-fixed-nav .inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        padding: 0 20px;
+        }
+
+        .project-fixed-nav .slot-left { justify-self: start; }
+        .project-fixed-nav .slot-center { justify-self: center; }
+        .project-fixed-nav .slot-right { justify-self: end; }
+
+        .project-fixed-nav .nav-btn {
+        appearance: none;
+        border: 1px solid #27272a;
+        background: linear-gradient(135deg,#1e293b 0%,#0f172a 100%);
+        color: #e4e4e7;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .project-fixed-nav .nav-btn:hover {
+        transform: translateY(-1px);
+        border-color: #3b82f6;
+        box-shadow: 0 6px 24px rgba(59,130,246,.15);
+        }
+
+        /* Remove border for Next Project button */
+        .project-fixed-nav .nav-btn.primary {
+        border: none;
+        }
+
+        /* Hide prev/next when unavailable */
+        .project-fixed-nav .nav-btn.hidden {
+        display: none;
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 gap: 20px;
@@ -846,105 +984,158 @@
 </div>
 
 <script>
-  function showProject(projectId) {
-    document.body.classList.add('viewing-project');
-    const section = document.getElementById('project-' + projectId);
-    if (section) section.classList.add('active');
-    window.scrollTo(0, 0);
+  const PROJECT_ORDER = ["drone", "sensor", "youtube", "tetris"];
 
-    // Lazy-load Tetris only when opening the Tetris project
-    if (projectId === 'tetris') {
-        const iframe = document.getElementById('tetris-iframe');
-        if (iframe) {
-            iframe.src = iframe.dataset.src || './tetris/index.html';
-        }
+  // --- Build fixed bottom nav bar ---
+  const fixedBar = document.createElement("div");
+  fixedBar.className = "project-fixed-nav";
+  fixedBar.innerHTML = `
+    <div class="inner">
+      <button class="nav-btn prev-btn">← Previous Project</button>
+      <a href="#projects" class="nav-btn back-btn">Back to Projects</a>
+      <button class="nav-btn primary next-btn">Next Project →</button>
+    </div>
+  `;
+  document.body.appendChild(fixedBar);
+
+  const prevBtn = fixedBar.querySelector(".prev-btn");
+  const nextBtn = fixedBar.querySelector(".next-btn");
+  const backBtn = fixedBar.querySelector(".back-btn");
+  const inner = fixedBar.querySelector(".inner");
+
+  function showFixedBar(show) {
+    fixedBar.style.display = show ? "block" : "none";
+  }
+
+  function updateNavButtons(projectId) {
+    const index = PROJECT_ORDER.indexOf(projectId);
+    const isFirst = index === 0;
+    const isLast = index === PROJECT_ORDER.length - 1;
+
+    // Hide or show prev/next buttons
+    prevBtn.style.display = isFirst ? "none" : "inline-block";
+    nextBtn.style.display = isLast ? "none" : "inline-block";
+
+    // Adjust grid layout depending on visible buttons
+    if (isFirst) {
+      inner.style.gridTemplateColumns = "auto 1fr"; // center + right only
+      backBtn.style.justifySelf = "start";
+    } else if (isLast) {
+      inner.style.gridTemplateColumns = "1fr auto"; // left + center only
+      backBtn.style.justifySelf = "end";
+    } else {
+      inner.style.gridTemplateColumns = "1fr auto 1fr"; // normal
+      backBtn.style.justifySelf = "center";
     }
+  }
+
+  function showProject(projectId) {
+    document.body.classList.add("viewing-project");
+    document.querySelectorAll(".project-detail").forEach(el => el.classList.remove("active"));
+    const section = document.getElementById("project-" + projectId);
+    if (section) section.classList.add("active");
+
+    // Lazy-load Tetris only when opening that project
+    if (projectId === "tetris") {
+      const iframe = document.getElementById("tetris-iframe");
+      if (iframe && !iframe.src) iframe.src = iframe.dataset.src || "./Tetris/index.html";
+    }
+
+    showFixedBar(true);
+    updateNavButtons(projectId);
+    window.scrollTo(0, 0);
   }
 
   function showMain(event) {
-    event.preventDefault();
-    document.body.classList.remove('viewing-project');
-    document.querySelectorAll('.project-detail').forEach(el => el.classList.remove('active'));
+    if (event) event.preventDefault();
+    document.body.classList.remove("viewing-project");
+    document.querySelectorAll(".project-detail").forEach(el => el.classList.remove("active"));
 
-    // Unload Tetris so it stops running when leaving the project
-    const tetrisIframe = document.getElementById('tetris-iframe');
-    if (tetrisIframe) {
-    tetrisIframe.setAttribute('src', 'about:blank'); // clear and stop the game
-    }
+    // Stop Tetris
+    const tetrisIframe = document.getElementById("tetris-iframe");
+    if (tetrisIframe) tetrisIframe.src = "about:blank";
 
+    const projects = document.getElementById("projects");
+    if (projects) projects.scrollIntoView({ behavior: "smooth" });
+    else window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // If clicking a nav link, scroll to that section
-    const href = event.target.getAttribute('href');
-    if (href && href.startsWith('#')) {
-      setTimeout(() => {
-        const element = document.querySelector(href);
-        if (element) element.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    unlockScroll(); // re-enable scroll if it was locked for the game
+    showFixedBar(false);
+    unlockScroll();
   }
 
-  // Smooth scrolling for nav links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      if (this.getAttribute('onclick')) return;
+  function navigateProject(direction) {
+    const active = document.querySelector(".project-detail.active");
+    if (!active) return;
+    const id = active.id.replace("project-", "");
+    const index = PROJECT_ORDER.indexOf(id);
+    if (index === -1) return;
+    const nextIndex = index + (direction === "next" ? 1 : -1);
+    if (nextIndex < 0 || nextIndex >= PROJECT_ORDER.length) return;
+    showProject(PROJECT_ORDER[nextIndex]);
+  }
+
+  // Handle clicks for all nav buttons
+  fixedBar.addEventListener("click", e => {
+    if (e.target.closest(".back-btn")) {
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
+      showMain(e);
+    } else if (e.target.closest(".prev-btn")) {
+      e.preventDefault();
+      navigateProject("prev");
+    } else if (e.target.closest(".next-btn")) {
+      e.preventDefault();
+      navigateProject("next");
+    }
+  });
+
+  // Smooth scrolling for top navbar links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(e) {
+      if (this.getAttribute("onclick")) return;
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) target.scrollIntoView({ behavior: "smooth" });
     });
   });
 
-  // ---- Tetris iframe: prevent page scrolling while playing ----
-  const tetrisIframe = document.getElementById('tetris-iframe');
-  const SCROLL_KEYS = new Set(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','PageUp','PageDown','Home','End']);
-
-  // Ensure iframe can be focused (no visual change)
-  if (tetrisIframe && tetrisIframe.tabIndex < 0) {
-    tetrisIframe.tabIndex = 0;
-  }
+  // ---- Tetris iframe scroll lock ----
+  const tetrisIframeEl = document.getElementById("tetris-iframe");
+  const SCROLL_KEYS = new Set(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," ","PageUp","PageDown","Home","End"]);
+  if (tetrisIframeEl && tetrisIframeEl.tabIndex < 0) tetrisIframeEl.tabIndex = 0;
 
   let scrollLocked = false;
-
   function lockScroll() {
     if (scrollLocked) return;
     scrollLocked = true;
-    const html = document.documentElement;
-    const body = document.body;
-    html.dataset.prevOverflow = html.style.overflow || '';
-    body.dataset.prevOverflow = body.style.overflow || '';
-    html.style.overflow = 'hidden';
-    body.style.overflow = 'hidden';
+    const html = document.documentElement, body = document.body;
+    html.dataset.prevOverflow = html.style.overflow || "";
+    body.dataset.prevOverflow = body.style.overflow || "";
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
   }
-
   function unlockScroll() {
     if (!scrollLocked) return;
     scrollLocked = false;
-    const html = document.documentElement;
-    const body = document.body;
-    html.style.overflow = html.dataset.prevOverflow || '';
-    body.style.overflow = body.dataset.prevOverflow || '';
+    const html = document.documentElement, body = document.body;
+    html.style.overflow = html.dataset.prevOverflow || "";
+    body.style.overflow = body.dataset.prevOverflow || "";
   }
 
-  // Lock scroll while interacting with the iframe; unlock when leaving
-  if (tetrisIframe) {
-    tetrisIframe.addEventListener('pointerenter', lockScroll);
-    tetrisIframe.addEventListener('pointerleave', unlockScroll);
-    tetrisIframe.addEventListener('pointerdown', () => {
+  if (tetrisIframeEl) {
+    tetrisIframeEl.addEventListener("pointerenter", lockScroll);
+    tetrisIframeEl.addEventListener("pointerleave", unlockScroll);
+    tetrisIframeEl.addEventListener("pointerdown", () => {
       lockScroll();
-      tetrisIframe.focus();
+      tetrisIframeEl.focus();
     });
-    tetrisIframe.addEventListener('blur', unlockScroll);
+    tetrisIframeEl.addEventListener("blur", unlockScroll);
   }
 
-  // Extra safety: if scroll is locked, eat scroll-related keys at the parent level
-  document.addEventListener('keydown', (e) => {
-    if (scrollLocked && SCROLL_KEYS.has(e.key)) {
-      e.preventDefault();
-    }
+  document.addEventListener("keydown", (e) => {
+    if (scrollLocked && SCROLL_KEYS.has(e.key)) e.preventDefault();
   }, { capture: true });
+
+  showFixedBar(false);
 </script>
 
 
