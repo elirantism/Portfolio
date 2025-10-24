@@ -648,8 +648,7 @@
             <ul class="nav-links">
                 <li><a href="#about" onclick="showMain(event)">About</a></li>
                 <li><a href="#projects" onclick="showMain(event)">Projects</a></li>
-                <li><a href="#resume">Resume</a></li>
-                <li><a href="https://github.com/yourprofile" target="_blank">GitHub</a></li>
+                <li><a href="https://github.com/elirantism" target="_blank">GitHub</a></li>
                 <li><a href="#contact" onclick="showMain(event)">Contact</a></li>
             </ul>
         </div>
@@ -1072,6 +1071,41 @@
     document.querySelectorAll(".project-detail").forEach(el => el.classList.remove("active"));
 
     const projects = document.getElementById("projects");
+    if (projects) projects.scrollIntoView({ behavior: "smooth" });
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+
+    showFixedBar(false);
+    unlockScroll();
+  }
+
+  function showAbout(event) {
+    if (event) event.preventDefault();
+    
+    // Hide Tetris iframe when going back to main (don't clear src)
+    const tetrisIframe = document.getElementById("tetris-iframe");
+    if (tetrisIframe) {
+      tetrisIframe.style.display = "none";
+    }
+
+    const projects = document.getElementById("about");
+    if (projects) projects.scrollIntoView({ behavior: "smooth" });
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+
+    showFixedBar(false);
+    unlockScroll();
+  }
+
+  function showContact(event) {
+    if (event) event.preventDefault();
+    
+    // Hide Tetris iframe when going back to main (don't clear src)
+    const tetrisIframe = document.getElementById("tetris-iframe");
+    if (tetrisIframe) {
+      tetrisIframe.style.display = "none";
+    }
+    
+
+    const projects = document.getElementById("contact");
     if (projects) projects.scrollIntoView({ behavior: "smooth" });
     else window.scrollTo({ top: 0, behavior: "smooth" });
 
