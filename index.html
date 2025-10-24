@@ -802,12 +802,13 @@
                 </p>
                 <iframe
                     id="tetris-iframe"
-                    src=""                              
-                    data-src="/Tetris/index.html"
+                    src=""
+                    data-src="./tetris/index.html"
                     tabindex="0"
                     style="width: 100%; height: 900px; border: 2px solid #3b82f6; border-radius: 8px; max-width: 600px; margin: 0 auto; display: block; background: #09090b;"
                     scrolling="no">
                 </iframe>
+
 
 
             </div>
@@ -853,10 +854,10 @@
 
     // Lazy-load Tetris only when opening the Tetris project
     if (projectId === 'tetris') {
-      const iframe = document.getElementById('tetris-iframe');
-      if (iframe && !iframe.src) {
-        iframe.src = iframe.dataset.src || '';
-      }
+        const iframe = document.getElementById('tetris-iframe');
+        if (iframe) {
+            iframe.src = iframe.dataset.src || './tetris/index.html';
+        }
     }
   }
 
@@ -867,9 +868,10 @@
 
     // Unload Tetris so it stops running when leaving the project
     const tetrisIframe = document.getElementById('tetris-iframe');
-    if (tetrisIframe && tetrisIframe.src) {
-      tetrisIframe.src = ''; // about:blank also fine; frees CPU + stops loops
+    if (tetrisIframe) {
+    tetrisIframe.setAttribute('src', 'about:blank'); // clear and stop the game
     }
+
 
     // If clicking a nav link, scroll to that section
     const href = event.target.getAttribute('href');
